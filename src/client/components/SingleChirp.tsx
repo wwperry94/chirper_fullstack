@@ -6,8 +6,8 @@ import { chirp } from "../types";
 const SingleChirp: React.FC<ISingleChirpProps> = (props: ISingleChirpProps) => {
     const [chirp, setChirp] = React.useState<chirp>({
         id: "",
-        username: "",
-        message: ""
+        name: "Test",
+        content: "Test"
     });
 
     React.useEffect(() => {
@@ -32,8 +32,8 @@ const SingleChirp: React.FC<ISingleChirpProps> = (props: ISingleChirpProps) => {
 
     const editChirp = async (id: string) => {
         const newChirp = {
-            username: chirp.username,
-            message: chirp.message
+            name: chirp.name,
+            content: chirp.content
         }
 
         await fetch(`/api/chirps/${id}`, {
@@ -49,8 +49,8 @@ const SingleChirp: React.FC<ISingleChirpProps> = (props: ISingleChirpProps) => {
 
     const onMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setChirp({
         id: chirp.id,
-        username: chirp.username,
-        message: e.target.value
+        name: chirp.name,
+        content: e.target.value
     });
 
     return (
@@ -58,10 +58,10 @@ const SingleChirp: React.FC<ISingleChirpProps> = (props: ISingleChirpProps) => {
             <div className="card shadow-lg m-2">
                 <div className="card-body">
                     <div className="row">
-                        <h5 className="card-title">@{chirp.username}</h5>
+                        <h5 className="card-title">@{chirp.name}</h5>
                     </div>
                     <div className="row">
-                        <textarea className="card-text" defaultValue={chirp.message} cols={50} rows={15} onChange={(e) => onMessageChange(e)}></textarea>
+                        <textarea className="card-text" defaultValue={chirp.content} cols={50} rows={15} onChange={(e) => onMessageChange(e)}></textarea>
                     </div>
                     <button className="btn btn-sm btn-outline-dark float-right mx-1" onClick={() => editChirp(chirp.id)}>Save</button>
                     <button className="btn btn-sm btn-outline-dark float-right mx-1" onClick={() => deleteChirp(chirp.id)}>Delete</button>

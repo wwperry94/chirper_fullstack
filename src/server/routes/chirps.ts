@@ -1,64 +1,72 @@
 import * as express from "express";
-import { GetChirps, GetChirp, UpdateChirp, CreateChirp, DeleteChirp } from "../utils/chirpstore";
+import db from '../db';
 
 const router: express.Router = express.Router();
 
-router.get("/", (req: express.Request, res: express.Response) => {
-    const data = GetChirps();
-    const chirps = Object.keys(data).map((key) => {
-        return {
-            id: key,
-            username: data[key].username,
-            message: data[key].message,
-        };
-    });
-    chirps.pop();
-    res.json(chirps);
-});
-
-router.get("/:id", (req: express.Request, res: express.Response) => {
-    const id: string = req.params.id;
-    const data = GetChirp(id);
-    const chirp = {
-        id: id,
-        username: data.username,
-        message: data.message
+router.get('/', async (req, res) => {
+    try {
+        res.json(await db.chirper.allChirps());
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
     };
-    res.send(JSON.stringify(chirp));
 });
 
-router.post("/", (req: express.Request, res: express.Response) => {
-    let chirpObj: chirp = {
-        username: req.body.username,
-        message: req.body.message
+router.get("/:id", async (req: express.Request, res: express.Response) => {
+    try {
+        res.json(await db.chirper.getChirp('id'));
+    }    catch (e) {
+        console.log(e);
+        res.sendStatus(500);
     };
-    CreateChirp(chirpObj);
-
-    res.sendStatus(200);
 });
+// router.get("/", (req: express.Request, res: express.Response) => {
+//     const data = GetChirps();
+//     const chirps = Object.keys(data).map((key) => {
+//         return {
+//             id: key,
+//             username: data[key].username,
+//             message: data[key].message,
+//         };
+//     });
+//     chirps.pop();
+//     res.json(chirps);
+// });
 
-router.put("/:id", (req: express.Request, res: express.Response) => {
-    const id: string = req.params.id;
-    let chirpObj: chirp = {
-        username: req.body.username,
-        message: req.body.message
-    };
-    UpdateChirp(id, chirpObj);
 
-    res.sendStatus(200);
-});
 
-router.delete("/:id", (req: express.Request, res: express.Response) => {
-    const id: string = req.params.id;
-    console.log(id)
-    DeleteChirp(id);
+// router.post("/", (req: express.Request, res: express.Response) => {
+//     let chirpObj: chirp = {
+//         username: req.body.username,
+//         message: req.body.message
+//     };
+//     CreateChirp(chirpObj);
 
-    res.send(`chirp ${req.params.id} was deleted`);
-});
+//     res.sendStatus(200);
+// });
 
-interface chirp {
-    username: string,
-    message: string
-}
+// router.put("/:id", (req: express.Request, res: express.Response) => {
+//     const id: string = req.params.id;
+//     let chirpObj: chirp = {
+//         username: req.body.username,
+//         message: req.body.message
+//     };
+//     UpdateChirp(id, chirpObj);
+
+//     res.sendStatus(200);
+// });
+
+// router.delete("/:id", (req: express.Request, res: express.Response) => {
+//     const id: string = req.params.id;
+//     console.log(id)
+//     DeleteChirp(id);
+
+//     res.send(`chirp ${req.params.id} was deleted`);
+// });
+
+// interface chirp {
+//     username: string,
+//     message: string
+// }
 
 export default router

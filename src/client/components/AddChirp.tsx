@@ -4,18 +4,18 @@ import { chirp } from "../types";
 
 const AddChirp: React.FC<IAddChirpProps> = (props: IAddChirpProps) => {
     const [chirp, setChirp] = React.useState<chirp>({
-        username: "",
-        message: ""
+        name: "",
+        content: ""
     });
 
-    const onUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => setChirp({
-        username: e.target.value,
-        message: chirp.message
+    const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => setChirp({
+        name: e.target.value,
+        content: chirp.content
     });
 
-    const onMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setChirp({
-        username: chirp.username,
-        message: e.target.value
+    const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setChirp({
+        name: chirp.name,
+        content: e.target.value
     });
 
     const saveChirp = async () => {
@@ -35,10 +35,10 @@ const AddChirp: React.FC<IAddChirpProps> = (props: IAddChirpProps) => {
             <div className="card shadow-lg m-2">
                 <div className="card-body">
                     <div className="row">
-                        <input type="text" className="card-title" defaultValue="" onChange={onUsernameChange}/>
+                        <input type="text" className="card-title" defaultValue="" onChange={onNameChange}/>
                     </div>
                     <div className="row">
-                        <textarea className="card-text" defaultValue={chirp.message} cols={50} rows={15} onChange={onMessageChange}></textarea>
+                        <textarea className="card-text" defaultValue={chirp.content} cols={50} rows={15} onChange={onContentChange}></textarea>
                     </div>
                     <button className="btn btn-sm btn-outline-dark float-right mx-1" onClick={saveChirp}>Save</button>
                 </div>
