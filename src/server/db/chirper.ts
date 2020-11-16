@@ -6,7 +6,14 @@ const allChirps = async () =>
 
 const getChirp = async (id: string) =>
     Query(
-        'SELECT Chirps.*, Users.name FROM Chirps JOIN Users ON Users.id = Chirps',
+        `
+    SELECT 
+        Chirps.*, 
+        Users.name 
+    FROM Chirps 
+    JOIN Users ON Users.id = Chirps.userid 
+    WHERE Chirps.id = ?
+    `, [id]
     );
 
 const postChirp = async (userid: string, content: string) =>
@@ -19,7 +26,7 @@ const editChirp = async (content: string, id: string) =>
     Query(
         'UPDATE Chirps SET content = ? WHERE id = ?',
         [content, id]
-    );
+    ); 
 
 const deleteChirp = async (id: string) =>
     Query(

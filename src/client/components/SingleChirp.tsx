@@ -1,26 +1,16 @@
 import React from 'react';
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useParams } from "react-router-dom";
 import { chirp } from "../types";
 
 
 const SingleChirp: React.FC<ISingleChirpProps> = (props: ISingleChirpProps) => {
+    const { id } = useParams()
     const [chirp, setChirp] = React.useState<chirp>({
         id: "",
-        name: "Test",
-        content: "Test"
+        name: "",
+        content: ""
     });
 
-    React.useEffect(() => {
-        (async () => {
-            try {
-                let res = await fetch(`/api/chirps/${props.match.params.id}`);
-                let chirp = await res.json();
-                setChirp(chirp);
-            } catch (err) {
-                console.log(err);
-            }
-        })();
-    }, []);
 
     const deleteChirp = async (id: string) => {
         await fetch(`/api/chirps/${id}`, {
@@ -47,11 +37,24 @@ const SingleChirp: React.FC<ISingleChirpProps> = (props: ISingleChirpProps) => {
         props.history.push("/");
     };
 
+
     const onMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setChirp({
         id: chirp.id,
         name: chirp.name,
         content: e.target.value
     });
+
+    React.useEffect(() => {
+        (async () => {
+            try {
+                let res = await fetch(`/api/chirps/${id}`);
+                let chirp = await res.json();
+                setChirp(chirp);
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, []);
 
     return (
         <div className="container">

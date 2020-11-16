@@ -13,9 +13,11 @@ router.get('/', async (req, res) => {
 });
 
 router.get("/:id", async (req: express.Request, res: express.Response) => {
+    const id = req.params.id
     try {
-        res.json(await db.chirper.getChirp('id'));
-    }    catch (e) {
+        let [chirp] = await db.chirper.getChirp(id)
+        res.json(chirp);
+    } catch (e) {
         console.log(e);
         res.sendStatus(500);
     };
